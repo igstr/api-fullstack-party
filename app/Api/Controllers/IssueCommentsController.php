@@ -5,6 +5,8 @@ namespace App\Api\Controllers;
 use App\Model\IssueCommentMapper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use Validator;
 
 class IssueCommentsController extends Controller
 {
@@ -30,9 +32,31 @@ class IssueCommentsController extends Controller
      */
     public function getAction(Request $request, $number)
     {
-        $num = (int) $number;
+        $params = $request->all();
+        $params['number'] = $number;
+
+        // Validate user input
+        $validator = Validator::make($params, [
+            'number'   => 'integer',
+            'page'     => 'nullable|integer|min:0',
+            'per_page' => 'nullable|integer|max:100',
+        ]);
+
         try {
-            $comments = $this->commentsMapper->fetch($num);
+            $params = $validator->validate();
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $defaults = [ 'page' => 0, 'per_page' => 10 ];
+        $params = array_merge($defaults, $params);
+        unset($params['number']);
+
+        try {
+            $comments = $this->commentsMapper->fetch($number, $params);
         } catch(\Exception $e) {
              return response()->json([
                 'success' => false,

@@ -5,7 +5,9 @@ namespace App\Api\Controllers;
 use App\Model\IssueMapper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Log;
+use Validator;
 
 class IssuesController extends Controller
 {
@@ -30,8 +32,26 @@ class IssuesController extends Controller
      */
     public function listAction(Request $request)
     {
+        // Validate user input
+        $validator = Validator::make($request->all(), [
+            'page'     => 'nullable|integer|min:0',
+            'per_page' => 'nullable|integer|max:100',
+        ]);
+
         try {
-            $issues = $this->issueMapper->fetch();
+            $params = $validator->validate();
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $defaults = [ 'page' => 0, 'per_page' => 10 ];
+        $params = array_merge($defaults, $params);
+
+        try {
+            $issues = $this->issueMapper->fetch($params);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([

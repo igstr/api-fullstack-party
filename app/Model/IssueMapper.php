@@ -13,7 +13,8 @@ class IssueMapper extends HttpMapper
      */
     public function fetch(array $params = [])
     {
-        $res = $this->client->request('GET', env('GITHUB_REPOSITORY').'/issues' );
+        $url = env('GITHUB_REPOSITORY').'/issues';
+        $res = $this->client->request('GET', $url, [ 'query' => $params ]);
 
         $decoded = $this->decodeResponse($res);
         if (empty($decoded)) {
