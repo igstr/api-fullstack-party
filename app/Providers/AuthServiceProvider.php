@@ -2,22 +2,12 @@
 
 namespace App\Providers;
 
-use App\User;
-use Illuminate\Support\Facades\Gate;
+use App\Model\UserMapper;
 use Illuminate\Support\ServiceProvider;
+use Log;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
     /**
      * Boot the authentication services for the application.
      *
@@ -31,8 +21,16 @@ class AuthServiceProvider extends ServiceProvider
         // the User instance via an API token or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            if ($request->input('api_token')) {
-                return User::where('api_token', $request->input('api_token'))->first();
+            $userMapper = $this->app->make(UserMapper::class);
+            if ($token = $request->input('access_token')) {
+                try {
+                    $user = $userMapper->fetchByToken($token);
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
+                    return;
+                }
+
+                return $user;
             }
         });
     }
