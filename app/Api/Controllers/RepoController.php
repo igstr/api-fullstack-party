@@ -37,7 +37,7 @@ class RepoController extends Controller
             Log::error($e->getMessage());
             return response()->json([
                 'success' => false,
-                'error' => 'An error occured. Cannot get repository data.'
+                'errors' => [ 'An error occured. Cannot get repository data.' ],
             ], 500);
         }
 

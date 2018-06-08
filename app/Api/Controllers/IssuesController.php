@@ -43,7 +43,7 @@ class IssuesController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'error' => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 400);
         }
 
@@ -56,7 +56,7 @@ class IssuesController extends Controller
             Log::error($e->getMessage());
             return response()->json([
                 'success' => false,
-                'error' => 'An error occured. Cannot get issues.'
+                'errors' => [ 'An error occured. Cannot get issues.' ],
             ], 500);
         }
 
@@ -83,14 +83,14 @@ class IssuesController extends Controller
             Log::error($e->getMessage());
             return response()->json([
                 'success' => false,
-                'error' => 'An error occured. Cannot get an issue.'
+                'errors' => [ 'An error occured. Cannot get an issue.' ],
             ], 500);
         }
 
         if (!issue) {
              return response()->json([
                 'success' => false,
-                'error' => 'Cannot find a match for such issue.',
+                'errors' => [ 'Cannot find a match for such issue.' ],
             ], 400);
         }
 

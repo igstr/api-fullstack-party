@@ -47,7 +47,7 @@ class IssueCommentsController extends Controller
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'error' => $validator->errors(),
+                'errors' => $validator->errors(),
             ], 400);
         }
 
@@ -60,7 +60,7 @@ class IssueCommentsController extends Controller
         } catch(\Exception $e) {
              return response()->json([
                 'success' => false,
-                'error' => 'Cannot get commments of the issue.',
+                'errors' => [ 'Cannot get commments of the issue.' ],
             ], 500);
         }
 
