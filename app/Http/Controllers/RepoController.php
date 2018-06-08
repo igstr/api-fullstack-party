@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\Controllers;
+namespace App\Http\Controllers;
 
 use App\Model\RepoMapper;
 use Illuminate\Http\Request;
