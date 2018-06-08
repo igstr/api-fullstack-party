@@ -11,6 +11,6 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get('/', 'IndexController@indexAction');
+$router->get('/login', 'IndexController@loginAction');
+$router->get('/auth-callback', 'IndexController@callbackAction');
