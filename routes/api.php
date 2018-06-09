@@ -13,6 +13,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         [ 'prefix' => 'issues', 'middleware' => 'auth' ],
         function () use ($router) {
             $router->get('/', [ 'as' => 'issues', 'uses' => 'IssuesController@listAction' ] );
+            $router->get('/{num}/', [ 'as' => 'issue', 'uses' => 'IssuesController@getAction' ] );
 
             $router->get('/{num}/comments/', [
                 'as' => 'issue_comments',

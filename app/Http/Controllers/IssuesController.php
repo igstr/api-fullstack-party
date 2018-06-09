@@ -76,9 +76,21 @@ class IssuesController extends Controller
      */
     public function getAction(Request $request, $number)
     {
-        $num = (int)$number;
+        $params = [ 'number' => $number ];
+
+        // Validate user input
+        $validator = Validator::make($params, [
+            'number' => 'integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
         try {
-            $issue = $this->issueMapper->getByNumber($num);
+            $issue = $this->issueMapper->getByNumber($params['number']);
         } catch(\Exception $e) {
             Log::error($e->getMessage());
             return response()->json([
@@ -87,7 +99,7 @@ class IssuesController extends Controller
             ], 500);
         }
 
-        if (!issue) {
+        if (!$issue) {
              return response()->json([
                 'success' => false,
                 'errors' => [ 'Cannot find a match for such issue.' ],
