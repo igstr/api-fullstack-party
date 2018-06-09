@@ -27,8 +27,10 @@
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
         "classmap": [
-            "tests/",
             "database/"
         ]
     },
@@ -36,7 +38,8 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "start": "php -S localhost:8080 -t public"
+        "start": "php -S localhost:8080 -t public",
+        "test": "phpunit"
     },
     "config": {
         "preferred-install": "dist",

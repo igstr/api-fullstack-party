@@ -2,8 +2,13 @@
 
 namespace App\Model;
 
-class User
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+
+class User implements AuthenticatableContract
 {
+    use Authenticatable;
+
     public $id;
     public $login;
     public $avatar_url;
@@ -11,7 +16,7 @@ class User
     /**
      * Create entity
      */
-    public function __construct($data)
+    public function __construct($data = [])
     {
         $this->id = $data['id'] ?? null;
         $this->login = $data['login'] ?? null;
