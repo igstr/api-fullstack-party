@@ -1,9 +1,15 @@
 {
-    "name": "ignas/api-fullstack-party",
+    "name": "igstr/api-fullstack-party",
     "description": "API for fullstack party task",
     "license": "MIT",
     "keywords": ["laravel", "lumen"],
     "type": "project",
+    "authors": [
+        {
+            "name": "Ignas Strimaitis",
+            "email": "ignas.strimaitis@protonmail.com"
+        }
+    ],
     "require": {
         "php": ">=7.1.3",
         "guzzlehttp/guzzle": "~6.0",
