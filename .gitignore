@@ -2,4 +2,6 @@
 /.idea
 .env
 
+.DS_Store
+
 TAGS
