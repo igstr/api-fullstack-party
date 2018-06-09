@@ -13,12 +13,10 @@ class UserMapper extends HttpMapper
      */
     public function fetchByToken($token)
     {
-        $url = env('GITHUB_API_URL').'/user';
         $query = [ 'access_token' => $token ];
+        $res = $this->client->request('GET', 'user', [ 'query' => $query ]);
 
-        $res = $this->client->request('GET', $url, [ 'query' => $query ]);
-
-        $decoded = $this->decodeResponse($res);
+        $decoded = $this->client->decodeJsonResponse($res);
         if (empty($decoded)) {
             return null;
         }

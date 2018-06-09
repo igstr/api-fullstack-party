@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client as HttpClient;
+use App\Http\Client as HttpClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Log;
 
 class IndexController extends Controller
 {
@@ -83,17 +84,13 @@ class IndexController extends Controller
             'form_params' => $params,
         ]);
 
-        if ($res->getStatusCode() != 200) {
+        try {
+            $decoded = $this->httpClient->decodeJsonResponse($res);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
             return response('An error occured during access token retrieval', 500);
         }
 
-        $body = $res->getBody();
-
-        $decoded = json_decode($body);
-        if (is_null($decoded) || empty($decoded->access_token)) {
-            return response('An error occured during access token retrieval', 500);
-        }
-
-        return redirect('/?access_token='.$decoded->access_token);
+        return redirect('/?access_token='.$decoded['access_token'] ?? '');
     }
 }

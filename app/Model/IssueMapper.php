@@ -13,10 +13,10 @@ class IssueMapper extends HttpMapper
      */
     public function fetch(array $params = [])
     {
-        $url = env('GITHUB_REPOSITORY').'/issues';
+        $url = 'repos/'.env('GITHUB_REPOSITORY').'/issues';
         $res = $this->client->request('GET', $url, [ 'query' => $params ]);
 
-        $decoded = $this->decodeResponse($res);
+        $decoded = $this->client->decodeJsonResponse($res);
         if (empty($decoded)) {
             return [];
         }
@@ -38,9 +38,10 @@ class IssueMapper extends HttpMapper
      */
     public function getByNumber($number)
     {
-        $res = $this->client->request('GET', env('GITHUB_REPOSITORY').'/issues/'.$number );
+        $url = 'repos/'.env('GITHUB_REPOSITORY').'/issues/'.$number;
+        $res = $this->client->request('GET', $url );
 
-        $decoded = $this->decodeResponse($res);
+        $decoded = $this->client->decodeJsonResponse($res);
         if (empty($decoded)) {
             return false;
         }

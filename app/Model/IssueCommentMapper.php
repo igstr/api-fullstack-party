@@ -14,10 +14,10 @@ class IssueCommentMapper extends HttpMapper
      */
     public function fetch($number, array $params = [])
     {
-        $url = env('GITHUB_REPOSITORY').'/issues/'.$number.'/comments';
+        $url = 'repos/'.env('GITHUB_REPOSITORY').'/issues/'.$number.'/comments';
         $res = $this->client->request('GET', $url, [ 'query' => $params ]);
 
-        $decoded = $this->decodeResponse($res);
+        $decoded = $this->client->decodeJsonResponse($res);
         if (empty($decoded)) {
             return [];
         }

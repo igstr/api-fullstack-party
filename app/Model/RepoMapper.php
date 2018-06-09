@@ -11,9 +11,10 @@ class RepoMapper extends HttpMapper
      */
     public function fetch()
     {
-        $res = $this->client->request('GET', env('GITHUB_REPOSITORY'));
+        $url = 'repos/'.env('GITHUB_REPOSITORY');
+        $res = $this->client->request('GET', $url);
 
-        $decoded = $this->decodeResponse($res);
+        $decoded = $this->client->decodeJsonResponse($res);
 
         return new Repo($decoded);
     }
